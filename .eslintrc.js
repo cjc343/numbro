@@ -38,6 +38,7 @@ module.exports = {
     "env": {
         "node": true,
         "jasmine": true,
+        "amd": true,
         "es6": true
     },
     // "rulesdir": ["eslint_rules"],

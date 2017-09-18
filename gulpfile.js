@@ -28,10 +28,11 @@ const buffer = require("vinyl-buffer");
 const path = require("path");
 const fs = require("fs");
 const reporters = require("jasmine-reporters");
+const Server = require("karma").Server;
 
 const plugins = require("gulp-load-plugins")({
     rename: {
-        "gulp-jasmine-browser": "jasmineBrowser"
+        "gulp-jasmine-phantom-requirejs": "jasminePhantom"
     }
 });
 
@@ -54,7 +55,9 @@ gulp.task("pre-test", () => {
         .pipe(plugins.istanbul.hookRequire());
 });
 
-gulp.task("test", ["pre-test"], () => {
+gulp.task("test", ["test:unit", "test:integration"], () => {});
+
+gulp.task("test:unit", ["pre-test"], () => {
     return gulp.src("./tests/**/*.js")
         .pipe(plugins.jasmine({
             reporter: new reporters.TerminalReporter()
@@ -63,11 +66,23 @@ gulp.task("test", ["pre-test"], () => {
         .pipe(plugins.istanbul.enforceThresholds({thresholds: {global: 100}}));
 });
 
-gulp.task("jasmine", () => {
-    return gulp.src(["src/**/*.js", "./tests/**/*.js"])
-        .pipe(plugins.jasmineBrowser.specRunner())
-        .pipe(plugins.jasmineBrowser.server({port: 8888}));
-});
+gulp.task("test:integration", ["test:integration:node", "test:integration:amd"], () => {});
+
+gulp.task("test:integration:amd", ["build"], (done) => {
+        new Server({
+            configFile: `${__dirname }/karma.conf.js`,
+            singleRun: true
+        }, done).start();
+    }
+);
+
+gulp.task("test:integration:node", ["build"], () => {
+        return gulp.src("./integrationTests/node/**/*.js")
+            .pipe(plugins.jasmine({
+                reporter: new reporters.TerminalReporter()
+            }));
+    }
+);
 
 // Build
 
