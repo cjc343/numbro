@@ -136,6 +136,13 @@ describe("validatingSpec", () => {
                         output: "lapin"
                     },
                     "[Validate format] output invalid value: must be among [\"currency\",\"percent\",\"byte\",\"time\",\"ordinal\",\"number\"], \"lapin\" provided"
+                ],
+                [
+                    {
+                        totalLength: 2,
+                        exponential: true
+                    },
+                    "[Validate format] totalLength invalid value: `totalLength` is incompatible with `exponential`"
                 ]
             ];
 

@@ -66,7 +66,9 @@ const validFormat = {
     },
     base: {
         type: "string",
-        validValues: validBaseValues
+        validValues: validBaseValues,
+        restriction: (number, format) => format.output === "byte",
+        message: "`base` must be provided only when the output is `byte`"
     },
     characteristic: {
         type: "number",
@@ -82,8 +84,16 @@ const validFormat = {
     average: "boolean",
     totalLength: {
         type: "number",
-        restriction: (number) => number >= 0,
-        message: "value must be positive"
+        restrictions: [
+            {
+                restriction: (number) => number >= 0,
+                message: "value must be positive"
+            },
+            {
+                restriction: (number, format) => !format.exponential,
+                message: "`totalLength` is incompatible with `exponential`"
+            }
+        ]
     },
     mantissa: {
         type: "number",
@@ -99,7 +109,10 @@ const validFormat = {
         type: "string",
         validValues: validNegativeValues
     },
-    forceSign: "boolean"
+    forceSign: "boolean",
+    exponential: {
+        type: "boolean"
+    }
 };
 
 const validLanguage = {
@@ -184,7 +197,18 @@ function validateSpec(toValidate, spec, prefix) {
             return false;
         }
 
-        if (data.restriction && !data.restriction(value)) {
+        if (data.restrictions && data.restrictions.length) {
+            let length = data.restrictions.length;
+            for (let i = 0; i < length; i++) {
+                let {restriction, message} = data.restrictions[i];
+                if (!restriction(value, toValidate)) {
+                    console.error(`${prefix} ${key} invalid value: ${message}`); // eslint-disable-line no-console
+                    return false;
+                }
+            }
+        }
+
+        if (data.restriction && !data.restriction(value, toValidate)) {
             console.error(`${prefix} ${key} invalid value: ${data.message}`); // eslint-disable-line no-console
             return false;
         }

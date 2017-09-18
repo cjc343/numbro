@@ -348,6 +348,38 @@ function computeAverage({value, forceAverage, abbreviations, spaceSeparated = fa
 }
 
 /**
+ * Compute an exponential form for VALUE, taking into account CHARACTERISTIC
+ * if provided.
+ * @param {number} value - value to compute
+ * @param {number} [characteristicPrecision] - optional characteristic length
+ * @return {{value: number, abbreviation: string}}
+ */
+function computeExponential({value, characteristicPrecision = 0}) {
+    let [numberString, exponential] = value.toExponential().split("e");
+    let number = +numberString;
+
+    if (!characteristicPrecision) {
+        return {
+            value: number,
+            abbreviation: `e${exponential}`
+        };
+    }
+
+    let characteristicLength = 1; // see `toExponential`
+
+    if (characteristicLength < characteristicPrecision) {
+        number = number * Math.pow(10, characteristicPrecision - characteristicLength);
+        exponential = +exponential - (characteristicPrecision - characteristicLength);
+        exponential = exponential >= 0 ? `+${exponential}` : exponential;
+    }
+
+    return {
+        value: number,
+        abbreviation: `e${exponential}`
+    };
+}
+
+/**
  * Return a string of NUMBER zero.
  *
  * @param {number} number - Length of the output
@@ -641,6 +673,7 @@ function formatNumber({instance, providedFormat, state = globalState, decimalSep
     let spaceSeparated = options.spaceSeparated;
     let negative = options.negative;
     let forceSign = options.forceSign;
+    let exponential = options.exponential;
 
     let abbreviation = "";
 
@@ -654,19 +687,28 @@ function formatNumber({instance, providedFormat, state = globalState, decimalSep
         });
 
         value = data.value;
-        abbreviation = data.abbreviation;
+        abbreviation += data.abbreviation;
 
         if (totalLength) {
             mantissaPrecision = data.mantissaPrecision;
         }
     }
 
-    // Set mantissa precision
+    if (exponential) {
+        let data = computeExponential({
+            value,
+            characteristicPrecision
+        });
+
+        value = data.value;
+        abbreviation = data.abbreviation + abbreviation;
+    }
+
     let output = setMantissaPrecision(value.toString(), value, optionalMantissa, mantissaPrecision);
     output = setCharacteristicPrecision(output, value, optionalCharacteristic, characteristicPrecision);
     output = replaceDelimiters(output, value, thousandSeparated, state, decimalSeparator);
 
-    if (average) {
+    if (average || exponential) {
         output = insertAbbreviation(output, abbreviation);
     }
 
