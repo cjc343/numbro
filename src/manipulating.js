@@ -20,38 +20,7 @@
  * SOFTWARE.
  */
 
-// Todo: add BigNumber support (https://github.com/MikeMcl/bignumber.js/)
-
-/**
- * Compute the power of 10 to use to not require a mantissa anymore.
- *
- * @param {number} x - number used for computation
- * @return {number}
- */
-function multiplier(x) {
-    let mantissa = x.toString().split(".")[1];
-
-    if (!mantissa) {
-        return 1;
-    }
-
-    return Math.pow(10, mantissa.length);
-}
-
-/**
- * Compute a factor use to reduce floating error while manipulating numbers.
- *
- * @param {number} args - numbers used to compute a matching correction factor
- */
-function correctionFactor(...args) {
-    let smaller = args.reduce((prev, next) => {
-        let mp = multiplier(prev);
-        let mn = multiplier(next);
-        return mp > mn ? prev : next;
-    }, -Infinity);
-
-    return multiplier(smaller);
-}
+const BigNumber = require("bignumber.js");
 
 /**
  * Add a number or a numbro to N.
@@ -62,19 +31,16 @@ function correctionFactor(...args) {
  * @return {Numbro} n
  */
 function add(n, other, numbro) {
-    let value = other;
+    let value = new BigNumber(n._value);
+    let otherValue = other;
 
     if (numbro.isNumbro(other)) {
-        value = other._value;
+        otherValue = other._value;
     }
 
-    let factor = correctionFactor(n._value, value);
+    otherValue = new BigNumber(otherValue);
 
-    function callback(acc, number) {
-        return acc + factor * number;
-    }
-
-    n._value = [n._value, value].reduce(callback, 0) / factor;
+    n._value = value.add(otherValue).toNumber();
     return n;
 }
 
@@ -87,19 +53,16 @@ function add(n, other, numbro) {
  * @return {Numbro} n
  */
 function subtract(n, other, numbro) {
-    let value = other;
+    let value = new BigNumber(n._value);
+    let otherValue = other;
 
     if (numbro.isNumbro(other)) {
-        value = other._value;
+        otherValue = other._value;
     }
 
-    let factor = correctionFactor(n._value, value);
+    otherValue = new BigNumber(otherValue);
 
-    function callback(acc, number) {
-        return acc - factor * number;
-    }
-
-    n._value = [value].reduce(callback, n._value * factor) / factor;
+    n._value = value.minus(otherValue).toNumber();
     return n;
 }
 
@@ -112,22 +75,16 @@ function subtract(n, other, numbro) {
  * @return {Numbro} n
  */
 function multiply(n, other, numbro) {
-    let value = other;
+    let value = new BigNumber(n._value);
+    let otherValue = other;
 
     if (numbro.isNumbro(other)) {
-        value = other._value;
+        otherValue = other._value;
     }
 
-    function callback(accum, curr) {
-        let factor = correctionFactor(accum, curr);
-        let result = accum * factor;
-        result *= curr * factor;
-        result /= factor * factor;
+    otherValue = new BigNumber(otherValue);
 
-        return result;
-    }
-
-    n._value = [n._value, value].reduce(callback, 1);
+    n._value = value.times(otherValue).toNumber();
     return n;
 }
 
@@ -140,18 +97,16 @@ function multiply(n, other, numbro) {
  * @return {Numbro} n
  */
 function divide(n, other, numbro) {
-    let value = other;
+    let value = new BigNumber(n._value);
+    let otherValue = other;
 
     if (numbro.isNumbro(other)) {
-        value = other._value;
+        otherValue = other._value;
     }
 
-    function callback(accum, curr) {
-        let factor = correctionFactor(accum, curr);
-        return (accum * factor) / (curr * factor);
-    }
+    otherValue = new BigNumber(otherValue);
 
-    n._value = [n._value, value].reduce(callback);
+    n._value = value.dividedBy(otherValue).toNumber();
     return n;
 }
 

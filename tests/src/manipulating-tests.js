@@ -23,6 +23,7 @@
 const rewire = require("rewire");
 const manipulatingModule = rewire("../../src/manipulating");
 const manipulating = manipulatingModule(numbroStub);
+const BigNumber = require("bignumber.js");
 
 function numbroStub(value) {
     return {_value: value};
@@ -33,56 +34,15 @@ describe("manipulating", () => {
         numbroStub.isNumbro = jasmine.createSpy("isNumbro");
     });
 
-    describe("multiplier", () => {
-        let multiplier = undefined;
-
-        beforeEach(() => {
-            multiplier = manipulatingModule.__get__("multiplier");
-        });
-
-        it("returns multiplier to get rid of mantissa", () => {
-            let data = [
-                // [value, expectedOutput]
-                [10, 1],
-                [1, 1],
-                [0.1, 10],
-                [0.01, 100],
-                [0.001, 1000],
-                [0.0001, 10000]
-            ];
-
-            data.forEach(([value, expectedOutput]) => {
-                let result = multiplier(value);
-                expect(result).toBe(expectedOutput);
-            });
-        });
-    });
-
-    describe("correctionFactor", () => {
-        let correctionFactor = undefined;
-
-        beforeEach(() => {
-            correctionFactor = manipulatingModule.__get__("correctionFactor");
-        });
-
-        it("returns the biggest multiplier", () => {
-            let data = [
-                // [value, expectedOutput]
-                [[10, 1, 0.1], 10],
-                [[0.1, 1, 10], 10]
-            ];
-
-            data.forEach(([args, expectedOutput]) => {
-                let result = correctionFactor(...args);
-                expect(result).toBe(expectedOutput);
-            });
-        });
-    });
 
     describe("add", () => {
         it("works with numbers", () => {
             let data = [
                 // [value, other, expectedOutput]
+                [0.1, 0.2, 0.3],
+                [new BigNumber(0.1), new BigNumber(0.2), 0.3],
+                [0.1, new BigNumber(0.2), 0.3],
+                [new BigNumber(0.1), 0.2, 0.3],
                 [1000, 10, 1010],
                 [0.5, 3, 3.5],
                 [-100, 200, 100],
@@ -99,6 +59,10 @@ describe("manipulating", () => {
         it("works with numbro instances", () => {
             let data = [
                 // [value, other, expectedOutput]
+                [0.1, 0.2, 0.3],
+                [new BigNumber(0.1), new BigNumber(0.2), 0.3],
+                [0.1, new BigNumber(0.2), 0.3],
+                [new BigNumber(0.1), 0.2, 0.3],
                 [1000, 10, 1010],
                 [0.5, 3, 3.5],
                 [-100, 200, 100],
@@ -118,6 +82,10 @@ describe("manipulating", () => {
         it("works with numbers", () => {
             let data = [
                 // [value, other, expectedOutput]
+                [0.1, 0.2, -0.1],
+                [new BigNumber(0.1), new BigNumber(0.2), -0.1],
+                [0.1, new BigNumber(0.2), -0.1],
+                [new BigNumber(0.1), 0.2, -0.1],
                 [1000, 10, 990],
                 [0.5, 3, -2.5],
                 [-100, 200, -300],
@@ -134,6 +102,10 @@ describe("manipulating", () => {
         it("works with numbro instances", () => {
             let data = [
                 // [value, other, expectedOutput]
+                [0.1, 0.2, -0.1],
+                [new BigNumber(0.1), new BigNumber(0.2), -0.1],
+                [0.1, new BigNumber(0.2), -0.1],
+                [new BigNumber(0.1), 0.2, -0.1],
                 [1000, 10, 990],
                 [0.5, 3, -2.5],
                 [-100, 200, -300],
@@ -153,6 +125,10 @@ describe("manipulating", () => {
         it("works with numbers", () => {
             let data = [
                 // [value, other, expectedOutput]
+                [0.1, 0.2, 0.02],
+                [new BigNumber(0.1), new BigNumber(0.2), 0.02],
+                [0.1, new BigNumber(0.2), 0.02],
+                [new BigNumber(0.1), 0.2, 0.02],
                 [1000, 10, 10000],
                 [0.5, 3, 1.5],
                 [-100, 200, -20000],
@@ -169,6 +145,10 @@ describe("manipulating", () => {
         it("works with numbro instances", () => {
             let data = [
                 // [value, other, expectedOutput]
+                [0.1, 0.2, 0.02],
+                [new BigNumber(0.1), new BigNumber(0.2), 0.02],
+                [0.1, new BigNumber(0.2), 0.02],
+                [new BigNumber(0.1), 0.2, 0.02],
                 [1000, 10, 10000],
                 [0.5, 3, 1.5],
                 [-100, 200, -20000],
@@ -188,6 +168,10 @@ describe("manipulating", () => {
         it("works with numbers", () => {
             let data = [
                 // [value, other, expectedOutput]
+                [0.1, 0.2, 0.5],
+                [new BigNumber(0.1), new BigNumber(0.2), 0.5],
+                [0.1, new BigNumber(0.2), 0.5],
+                [new BigNumber(0.1), 0.2, 0.5],
                 [1000, 10, 100],
                 [0.5, 3, 0.16666666666666666],
                 [-100, 200, -0.5],
@@ -204,6 +188,10 @@ describe("manipulating", () => {
         it("works with numbro instances", () => {
             let data = [
                 // [value, other, expectedOutput]
+                [0.1, 0.2, 0.5],
+                [new BigNumber(0.1), new BigNumber(0.2), 0.5],
+                [0.1, new BigNumber(0.2), 0.5],
+                [new BigNumber(0.1), 0.2, 0.5],
                 [1000, 10, 100],
                 [0.5, 3, 0.16666666666666666],
                 [-100, 200, -0.5],
@@ -223,6 +211,9 @@ describe("manipulating", () => {
         it("works with numbers", () => {
             let data = [
                 // [value, other]
+                [new BigNumber(0.1), new BigNumber(0.2)],
+                [0.1, new BigNumber(0.2)],
+                [new BigNumber(0.1), 0.2],
                 [1000, 10],
                 [0.5, 3],
                 [-100, 200],
@@ -239,6 +230,9 @@ describe("manipulating", () => {
         it("works with numbro instances", () => {
             let data = [
                 // [value, other]
+                [new BigNumber(0.1), new BigNumber(0.2)],
+                [0.1, new BigNumber(0.2)],
+                [new BigNumber(0.1), 0.2],
                 [1000, 10],
                 [0.5, 3],
                 [-100, 200],
@@ -258,6 +252,10 @@ describe("manipulating", () => {
         it("works with numbers", () => {
             let data = [
                 // [value, other, expectedOutput]
+                [0.01, 0.2, 0.19],
+                [new BigNumber(0.01), new BigNumber(0.2), 0.19],
+                [0.01, new BigNumber(0.2), 0.19],
+                [new BigNumber(0.01), 0.2, 0.19],
                 [1000, 10, 990],
                 [0.5, 3, 2.5],
                 [-100, 200, 300],
@@ -275,6 +273,10 @@ describe("manipulating", () => {
         it("works with numbro instances", () => {
             let data = [
                 // [value, other, expectedOutput]
+                [0.01, 0.2, 0.19],
+                [new BigNumber(0.01), new BigNumber(0.2), 0.19],
+                [0.01, new BigNumber(0.2), 0.19],
+                [new BigNumber(0.01), 0.2, 0.19],
                 [1000, 10, 990],
                 [0.5, 3, 2.5],
                 [-100, 200, 300],

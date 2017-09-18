@@ -83,5 +83,8 @@
     "numbro.d.ts",
     "languages",
     "dist"
-  ]
+  ],
+  "dependencies": {
+    "bignumber.js": "^4.0.4"
+  }
 }
