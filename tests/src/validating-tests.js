@@ -179,7 +179,18 @@ describe("validatingSpec", () => {
         it("validates valid language", () => {
             let data = [
                 // language
-                {delimiters: {thousands: "T"}}
+                {
+                    languageTag: "en-GB",
+                    delimiters: {},
+                    abbreviations: {
+                        thousand: "",
+                        million: "",
+                        billion: "",
+                        trillion: ""
+                    },
+                    ordinal: () => "",
+                    currency: {}
+                }
             ];
 
             data.forEach((format) => {
@@ -193,24 +204,76 @@ describe("validatingSpec", () => {
                 // [language, errorMessage]
                 [
                     {
-                        bar: 0
+                        delimiters: {},
+                        abbreviations: {
+                            thousand: "",
+                            million: "",
+                            billion: "",
+                            trillion: ""
+                        },
+                        ordinal: () => "",
+                        currency: {}
+                    },
+                    "[Validate language] Missing mandatory key \"languageTag\""
+                ],
+                [
+                    {
+                        bar: 0,
+                        languageTag: "en-GB",
+                        delimiters: {},
+                        abbreviations: {
+                            thousand: "",
+                            million: "",
+                            billion: "",
+                            trillion: ""
+                        },
+                        ordinal: () => "",
+                        currency: {}
                     },
                     "[Validate language] Invalid key: bar"
                 ],
                 [
                     {
-                        languageTag: 2
+                        languageTag: 2,
+                        delimiters: {},
+                        abbreviations: {
+                            thousand: "",
+                            million: "",
+                            billion: "",
+                            trillion: ""
+                        },
+                        ordinal: () => "",
+                        currency: {}
                     },
                     "[Validate language] languageTag type mismatched: \"string\" expected, \"number\" provided"
                 ],
                 [
                     {
+                        languageTag: "en-GB",
+                        delimiters: {},
+                        abbreviations: {
+                            thousand: "",
+                            million: "",
+                            billion: "",
+                            trillion: ""
+                        },
+                        ordinal: () => "",
+                        currency: {},
                         currencyDefaults: {bar: 2}
                     },
                     "[Validate currencyDefaults] Invalid key: bar"
                 ],
                 [
                     {
+                        languageTag: "en-GB",
+                        delimiters: {},
+                        abbreviations: {
+                            thousand: "",
+                            million: "",
+                            billion: "",
+                            trillion: ""
+                        },
+                        ordinal: () => "",
                         currency: {symbol: 2}
                     },
                     "[Validate currency] symbol type mismatched: \"string\" expected, \"number\" provided"

@@ -370,7 +370,18 @@ describe("globalState-tests", () => {
         });
 
         it("returns the language data matching the passed tag", () => {
-            let enGB = {languageTag: "en-GB"};
+            let enGB = {
+                languageTag: "en-GB",
+                delimiters: {},
+                abbreviations: {
+                    thousand: "",
+                    million: "",
+                    billion: "",
+                    trillion: ""
+                },
+                ordinal: () => "",
+                currency: {}
+            };
             globalState.registerLanguage(enGB);
 
             let data = globalState.languageData("en-GB");

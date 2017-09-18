@@ -43,6 +43,28 @@ const validNegativeValues = [
     "parenthesis"
 ];
 
+const validMandatoryAbbreviations = {
+    type: "object",
+    children: {
+        thousand: {
+            type: "string",
+            mandatory: true
+        },
+        million: {
+            type: "string",
+            mandatory: true
+        },
+        billion: {
+            type: "string",
+            mandatory: true
+        },
+        trillion: {
+            type: "string",
+            mandatory: true
+        }
+    },
+    mandatory: true
+};
 const validAbbreviations = {
     type: "object",
     children: {
@@ -68,7 +90,8 @@ const validFormat = {
         type: "string",
         validValues: validBaseValues,
         restriction: (number, format) => format.output === "byte",
-        message: "`base` must be provided only when the output is `byte`"
+        message: "`base` must be provided only when the output is `byte`",
+        mandatory: (format) => format.output === "byte"
     },
     characteristic: {
         type: "number",
@@ -121,24 +144,32 @@ const validFormat = {
 };
 
 const validLanguage = {
-    languageTag: "string",
+    languageTag: {
+        type: "string",
+        mandatory: true
+    },
     delimiters: {
         type: "object",
         children: {
             thousands: "string",
             decimal: "string"
-        }
+        },
+        mandatory: true
     },
-    abbreviations: validAbbreviations,
+    abbreviations: validMandatoryAbbreviations,
     spaceSeparated: "boolean",
-    ordinal: "function",
+    ordinal: {
+        type: "function",
+        mandatory: true
+    },
     currency: {
         type: "object",
         children: {
             symbol: "string",
             position: "string",
             code: "string"
-        }
+        },
+        mandatory: true
     },
     defaults: "format",
     ordinalDefaults: "format",
@@ -148,10 +179,22 @@ const validLanguage = {
     formats: {
         type: "object",
         children: {
-            fourDigits: "format",
-            fullWithTwoDecimals: "format",
-            fullWithTwoDecimalsNoCurrency: "format",
-            fullWithNoDecimals: "format"
+            fourDigits: {
+                type: "format",
+                mandatory: true
+            },
+            fullWithTwoDecimals: {
+                type: "format",
+                mandatory: true
+            },
+            fullWithTwoDecimalsNoCurrency: {
+                type: "format",
+                mandatory: true
+            },
+            fullWithNoDecimals: {
+                type: "format",
+                mandatory: true
+            }
         }
     }
 };
@@ -177,7 +220,7 @@ function validateInput(input) {
     return !!value;
 }
 
-function validateSpec(toValidate, spec, prefix) {
+function validateSpec(toValidate, spec, prefix, skipMandatoryCheck) {
     let results = Object.keys(toValidate).map((key) => {
         if (!spec[key]) {
             console.error(`${prefix} Invalid key: ${key}`); // eslint-disable-line no-console
@@ -191,8 +234,8 @@ function validateSpec(toValidate, spec, prefix) {
             data = {type: data};
         }
 
-        if (data.type === "format") {
-            let valid = validateSpec(value, validFormat, `[Validate ${key}]`);
+        if (data.type === "format") { // all formats are partial (a.k.a will be merged with some default values) thus no need to check mandatory values
+            let valid = validateSpec(value, validFormat, `[Validate ${key}]`, true);
 
             if (!valid) {
                 return false;
@@ -233,6 +276,29 @@ function validateSpec(toValidate, spec, prefix) {
 
         return true;
     });
+
+    if (!skipMandatoryCheck) {
+        results.push(...Object.keys(spec).map((key) => {
+            let data = spec[key];
+            if (typeof data === "string") {
+                data = {type: data};
+            }
+
+            if (data.mandatory) {
+                let mandatory = data.mandatory;
+                if (typeof mandatory === "function") {
+                    mandatory = mandatory(toValidate);
+                }
+
+                if (mandatory && toValidate[key] === undefined) {
+                    console.error(`${prefix} Missing mandatory key "${key}"`); // eslint-disable-line no-console
+                    return false;
+                }
+            }
+
+            return true;
+        }));
+    }
 
     return results.reduce((acc, current) => {
         return acc && current;
