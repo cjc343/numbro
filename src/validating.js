@@ -65,6 +65,7 @@ const validMandatoryAbbreviations = {
     },
     mandatory: true
 };
+
 const validAbbreviations = {
     type: "object",
     children: {
@@ -203,8 +204,8 @@ const validLanguage = {
  * Check the validity of the provided input and format.
  * The check is NOT lazy.
  *
- * @param input
- * @param format
+ * @param {string|number|Numbro} input - input to check
+ * @param {NumbroFormat} format - format to check
  * @return {boolean} True when everything is correct
  */
 function validate(input, format) {
@@ -214,13 +215,28 @@ function validate(input, format) {
     return validInput && isFormatValid;
 }
 
+/**
+ * Check the validity of the numbro input.
+ *
+ * @param {string|number|Numbro} input - input to check
+ * @return {boolean} True when everything is correct
+ */
 function validateInput(input) {
     let value = unformatter.unformat(input);
 
     return !!value;
 }
 
-function validateSpec(toValidate, spec, prefix, skipMandatoryCheck) {
+/**
+ * Check the validity of the provided format TOVALIDATE against SPEC.
+ *
+ * @param {NumbroFormat} toValidate - format to check
+ * @param {*} spec - specification against which to check
+ * @param {string} prefix - prefix use for error messages
+ * @param {boolean} skipMandatoryCheck - `true` when the check for mandatory key must be skipped
+ * @return {boolean} True when everything is correct
+ */
+function validateSpec(toValidate, spec, prefix, skipMandatoryCheck = false) {
     let results = Object.keys(toValidate).map((key) => {
         if (!spec[key]) {
             console.error(`${prefix} Invalid key: ${key}`); // eslint-disable-line no-console
@@ -305,12 +321,24 @@ function validateSpec(toValidate, spec, prefix, skipMandatoryCheck) {
     }, true);
 }
 
+/**
+ * Check the provided FORMAT.
+ *
+ * @param {NumbroFormat} format - format to check
+ * @return {boolean}
+ */
 function validateFormat(format) {
     return validateSpec(format, validFormat, "[Validate format]");
 }
 
-function validateLanguage(data) {
-    return validateSpec(data, validLanguage, "[Validate language]");
+/**
+ * Check the provided LANGUAGE.
+ *
+ * @param {NumbroLanguage} language - language to check
+ * @return {boolean}
+ */
+function validateLanguage(language) {
+    return validateSpec(language, validLanguage, "[Validate language]");
 }
 
 module.exports = {

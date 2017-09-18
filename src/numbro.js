@@ -71,6 +71,12 @@ class Numbro {
     valueOf() { return this._value; }
 }
 
+/**
+ * Make its best to convert input into a number.
+ *
+ * @param {numbro|string|number} input - Input to convert
+ * @return {number}
+ */
 function normalizeInput(input) {
     let result = input;
     if (numbro.isNumbro(input)) {

@@ -40,10 +40,28 @@ const allSuffixes = [
     {key: "B", factor: 1}
 ];
 
+/**
+ * Generate a RegExp where S get all RegExp specific characters escaped.
+ *
+ * @param {string} s - string representing a RegExp
+ * @return {string}
+ */
 function escapeRegExp(s) {
     return s.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
 }
 
+/**
+ * Unformat a numbro-generated string to retrieve the original value.
+ *
+ * @param {string} inputString - string to unformat
+ * @param {*} delimiters - Delimiters used to generate the inputString
+ * @param {string} [currencySymbol] - symbol used for currency while generating the inputString
+ * @param {function} ordinal - function used to generate an ordinal out of a number
+ * @param {string} zeroFormat - string representing zero
+ * @param {*} abbreviations - abbreviations used while generating the inputString
+ * @param {NumbroFormat} format - format used while generating the inputString
+ * @return {*}
+ */
 function unformatValue(inputString, delimiters, currencySymbol = "", ordinal, zeroFormat, abbreviations, format) {
     if (inputString === "") {
         return undefined;
@@ -157,6 +175,13 @@ function unformatValue(inputString, delimiters, currencySymbol = "", ordinal, ze
     return undefined;
 }
 
+/**
+ * Check if the INPUTSTRING represents a time.
+ *
+ * @param {string} inputString - string to check
+ * @param {*} delimiters - Delimiters used while generating the inputString
+ * @return {boolean}
+ */
 function matchesTime(inputString, delimiters) {
     let separators = inputString.indexOf(":") && delimiters.thousands !== ":";
 
@@ -176,6 +201,12 @@ function matchesTime(inputString, delimiters) {
     return !isNaN(hours) && !isNaN(minutes) && !isNaN(seconds);
 }
 
+/**
+ * Unformat a numbro-generated string representing a time to retrieve the original value.
+ *
+ * @param {string} inputString - string to unformat
+ * @return {number}
+ */
 function unformatTime(inputString) {
     let segments = inputString.split(":");
 
@@ -186,6 +217,13 @@ function unformatTime(inputString) {
     return seconds + 60 * minutes + 3600 * hours;
 }
 
+/**
+ * Unformat a numbro-generated string to retrieve the original value.
+ *
+ * @param {string} inputString - string to unformat
+ * @param {NumbroFormat} format - format used  while generating the inputString
+ * @return {number}
+ */
 function unformat(inputString, format) {
     // Avoid circular references
     const globalState = require("./globalState");

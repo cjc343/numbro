@@ -20,6 +20,13 @@
  * SOFTWARE.
  */
 
+/**
+ * Parse the format STRING looking for a prefix. Append it to RESULT when found.
+ *
+ * @param {string} string - format
+ * @param {NumbroFormat} result - Result accumulator
+ * @return {string} - format
+ */
 function parsePrefix(string, result) {
     let match = string.match(/^{([^}]*)}/);
     if (match) {
@@ -30,6 +37,13 @@ function parsePrefix(string, result) {
     return string;
 }
 
+/**
+ * Parse the format STRING looking for a postfix. Append it to RESULT when found.
+ *
+ * @param {string} string - format
+ * @param {NumbroFormat} result - Result accumulator
+ * @return {string} - format
+ */
 function parsePostfix(string, result) {
     let match = string.match(/{([^}]*)}$/);
     if (match) {
@@ -41,6 +55,13 @@ function parsePostfix(string, result) {
     return string;
 }
 
+/**
+ * Parse the format STRING looking for the output value. Append it to RESULT when found.
+ *
+ * @param {string} string - format
+ * @param {NumbroFormat} result - Result accumulator
+ * @return {string} - format
+ */
 function parseOutput(string, result) {
     if (string.indexOf("$") !== -1) {
         result.output = "currency";
@@ -82,18 +103,39 @@ function parseOutput(string, result) {
     }
 }
 
+/**
+ * Parse the format STRING looking for the thousand separated value. Append it to RESULT when found.
+ *
+ * @param {string} string - format
+ * @param {NumbroFormat} result - Result accumulator
+ * @return {string} - format
+ */
 function parseThousandSeparated(string, result) {
     if (string.indexOf(",") !== -1) {
         result.thousandSeparated = true;
     }
 }
 
+/**
+ * Parse the format STRING looking for the space separated value. Append it to RESULT when found.
+ *
+ * @param {string} string - format
+ * @param {NumbroFormat} result - Result accumulator
+ * @return {string} - format
+ */
 function parseSpaceSeparated(string, result) {
     if (string.indexOf(" ") !== -1) {
         result.spaceSeparated = true;
     }
 }
 
+/**
+ * Parse the format STRING looking for the total length. Append it to RESULT when found.
+ *
+ * @param {string} string - format
+ * @param {NumbroFormat} result - Result accumulator
+ * @return {string} - format
+ */
 function parseTotalLength(string, result) {
     let match = string.match(/[1-9]+[0-9]*/);
 
@@ -102,6 +144,13 @@ function parseTotalLength(string, result) {
     }
 }
 
+/**
+ * Parse the format STRING looking for the characteristic length. Append it to RESULT when found.
+ *
+ * @param {string} string - format
+ * @param {NumbroFormat} result - Result accumulator
+ * @return {string} - format
+ */
 function parseCharacteristic(string, result) {
     let characteristic = string.split(".")[0];
     let match = characteristic.match(/0+/);
@@ -110,6 +159,13 @@ function parseCharacteristic(string, result) {
     }
 }
 
+/**
+ * Parse the format STRING looking for the mantissa length. Append it to RESULT when found.
+ *
+ * @param {string} string - format
+ * @param {NumbroFormat} result - Result accumulator
+ * @return {string} - format
+ */
 function parseMantissa(string, result) {
     let mantissa = string.split(".")[1];
     if (mantissa) {
@@ -120,12 +176,26 @@ function parseMantissa(string, result) {
     }
 }
 
+/**
+ * Parse the format STRING looking for the average value. Append it to RESULT when found.
+ *
+ * @param {string} string - format
+ * @param {NumbroFormat} result - Result accumulator
+ * @return {string} - format
+ */
 function parseAverage(string, result) {
     if (string.indexOf("a") !== -1) {
         result.average = true;
     }
 }
 
+/**
+ * Parse the format STRING looking for a forced average precision. Append it to RESULT when found.
+ *
+ * @param {string} string - format
+ * @param {NumbroFormat} result - Result accumulator
+ * @return {string} - format
+ */
 function parseForceAverage(string, result) {
     if (string.indexOf("K") !== -1) {
         result.forceAverage = "thousand";
@@ -138,6 +208,13 @@ function parseForceAverage(string, result) {
     }
 }
 
+/**
+ * Parse the format STRING finding if the mantissa is optional. Append it to RESULT when found.
+ *
+ * @param {string} string - format
+ * @param {NumbroFormat} result - Result accumulator
+ * @return {string} - format
+ */
 function parseOptionalMantissa(string, result) {
     if (string.match(/\[\.]/)) {
         result.optionalMantissa = true;
@@ -146,6 +223,13 @@ function parseOptionalMantissa(string, result) {
     }
 }
 
+/**
+ * Parse the format STRING finding if the characteristic is optional. Append it to RESULT when found.
+ *
+ * @param {string} string - format
+ * @param {NumbroFormat} result - Result accumulator
+ * @return {string} - format
+ */
 function parseOptionalCharacteristic(string, result) {
     if (string.indexOf(".") !== -1) {
         let characteristic = string.split(".")[0];
@@ -153,6 +237,13 @@ function parseOptionalCharacteristic(string, result) {
     }
 }
 
+/**
+ * Parse the format STRING looking for the negative format. Append it to RESULT when found.
+ *
+ * @param {string} string - format
+ * @param {NumbroFormat} result - Result accumulator
+ * @return {string} - format
+ */
 function parseNegative(string, result) {
     if (string.match(/^\+?\([^)]*\)$/)) {
         result.negative = "parenthesis";
@@ -162,12 +253,26 @@ function parseNegative(string, result) {
     }
 }
 
+/**
+ * Parse the format STRING finding if the sign is mandatory. Append it to RESULT when found.
+ *
+ * @param {string} string - format
+ * @param {NumbroFormat} result - Result accumulator
+ * @return {string} - format
+ */
 function parseForceSign(string, result) {
     if (string.match(/^\+/)) {
         result.forceSign = true;
     }
 }
 
+/**
+ * Parse the format STRING and accumulating the values ie RESULT.
+ *
+ * @param {string} string - format
+ * @param {NumbroFormat} result - Result accumulator
+ * @return {string} - format
+ */
 function parseFormat(string, result = {}) {
     if (typeof string !== "string") {
         return string;

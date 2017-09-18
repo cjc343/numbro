@@ -22,9 +22,14 @@
 
 // Todo: add BigNumber support (https://github.com/MikeMcl/bignumber.js/)
 
+/**
+ * Compute the power of 10 to use to not require a mantissa anymore.
+ *
+ * @param {number} x - number used for computation
+ * @return {number}
+ */
 function multiplier(x) {
-    let parts = x.toString().split(".");
-    let mantissa = parts[1];
+    let mantissa = x.toString().split(".")[1];
 
     if (!mantissa) {
         return 1;
@@ -33,6 +38,11 @@ function multiplier(x) {
     return Math.pow(10, mantissa.length);
 }
 
+/**
+ * Compute a factor use to reduce floating error while manipulating numbers.
+ *
+ * @param {number} args - numbers used to compute a matching correction factor
+ */
 function correctionFactor(...args) {
     let smaller = args.reduce((prev, next) => {
         let mp = multiplier(prev);
@@ -43,6 +53,14 @@ function correctionFactor(...args) {
     return multiplier(smaller);
 }
 
+/**
+ * Add a number or a numbro to N.
+ *
+ * @param {Numbro} n - augend
+ * @param {number|Numbro} other - addend
+ * @param {numbro} numbro - numbro singleton
+ * @return {Numbro} n
+ */
 function add(n, other, numbro) {
     let value = other;
 
@@ -60,6 +78,14 @@ function add(n, other, numbro) {
     return n;
 }
 
+/**
+ * Subtract a number or a numbro from N.
+ *
+ * @param {Numbro} n - minuend
+ * @param {number|Numbro} other - subtrahend
+ * @param {numbro} numbro - numbro singleton
+ * @return {Numbro} n
+ */
 function subtract(n, other, numbro) {
     let value = other;
 
@@ -77,6 +103,14 @@ function subtract(n, other, numbro) {
     return n;
 }
 
+/**
+ * Multiply N by a number or a numbro.
+ *
+ * @param {Numbro} n - multiplicand
+ * @param {number|Numbro} other - multiplier
+ * @param {numbro} numbro - numbro singleton
+ * @return {Numbro} n
+ */
 function multiply(n, other, numbro) {
     let value = other;
 
@@ -97,6 +131,14 @@ function multiply(n, other, numbro) {
     return n;
 }
 
+/**
+ * Divide N by a number or a numbro.
+ *
+ * @param {Numbro} n - dividend
+ * @param {number|Numbro} other - divisor
+ * @param {numbro} numbro - numbro singleton
+ * @return {Numbro} n
+ */
 function divide(n, other, numbro) {
     let value = other;
 
@@ -113,6 +155,14 @@ function divide(n, other, numbro) {
     return n;
 }
 
+/**
+ * Set N to the OTHER (or the value of OTHER when it's a numbro instance).
+ *
+ * @param {Numbro} n - numbro instance to mutate
+ * @param {number|Numbro} other - new value to assign to N
+ * @param {numbro} numbro - numbro singleton
+ * @return {Numbro} n
+ */
 function set (n, other, numbro) {
     let value = other;
 
@@ -124,6 +174,14 @@ function set (n, other, numbro) {
     return n;
 }
 
+/**
+ * Return the distance between N and OTHER.
+ *
+ * @param {Numbro} n
+ * @param {number|Numbro} other
+ * @param {numbro} numbro - numbro singleton
+ * @return {number}
+ */
 function difference(n, other, numbro) {
     let clone = numbro(n._value);
     subtract(clone, other, numbro);
