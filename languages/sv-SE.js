@@ -6,8 +6,7 @@
  */
 
 module.exports = {
-    langLocaleCode: "sv-SE",
-    cultureCode: "sv-SE",
+    languageTag: "sv-SE",
     delimiters: {
         thousands: " ",
         decimal: ","
@@ -18,18 +17,39 @@ module.exports = {
         billion: "md",
         trillion: "tmd"
     },
+    ordinal: () => "",
     currency: {
         symbol: "kr",
         position: "postfix",
         code: "SEK"
     },
-    defaults: {
-        currencyFormat: ",4 a"
+    currencyFormat: {
+        thousandSeparated: true,
+        totalLength: 4,
+        spaceSeparated: true,
+        average: true
     },
     formats: {
-        fourDigits: "4 a",
-        fullWithTwoDecimals: ",0.00 $",
-        fullWithTwoDecimalsNoCurrency: ",0.00",
-        fullWithNoDecimals: ",0 $"
+        fourDigits: {
+            totalLength: 4,
+            spaceSeparated: true,
+            average: true
+        },
+        fullWithTwoDecimals: {
+            output: "currency",
+            mantissa: 2,
+            spaceSeparated: true,
+            thousandSeparated: true
+        },
+        fullWithTwoDecimalsNoCurrency: {
+            mantissa: 2,
+            thousandSeparated: true
+        },
+        fullWithNoDecimals: {
+            output: "currency",
+            spaceSeparated: true,
+            thousandSeparated: true,
+            mantissa: 0
+        }
     }
 };

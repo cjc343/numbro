@@ -5,8 +5,7 @@
  */
 
 module.exports = {
-    langLocaleCode: "bg",
-    cultureCode: "bg",
+    languageTag: "bg",
     delimiters: {
         thousands: " ",
         decimal: ","
@@ -17,9 +16,7 @@ module.exports = {
         billion: "M",
         trillion: "T"
     },
-    ordinal: function() {
-        return ".";
-    },
+    ordinal: () => ".",
     currency: {
         symbol: "лв.",
         code: "BGN"

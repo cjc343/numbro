@@ -60,7 +60,6 @@ function parsePostfix(string, result) {
  *
  * @param {string} string - format
  * @param {NumbroFormat} result - Result accumulator
- * @return {string} - format
  */
 function parseOutput(string, result) {
     if (string.indexOf("$") !== -1) {

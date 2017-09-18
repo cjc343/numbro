@@ -64,35 +64,6 @@ module.exports = function(context) {
         return foundLoader("require", stringToFind, sourceCode, comments);
     }
 
-    function hasPathFromTestToSource(node, testFile) {
-        let localPath = path.relative(process.cwd(), testFile);
-
-        if (!minimatch(localPath, `${options.testFolder}/**/*.*`)) {
-            return;
-        }
-
-        let extension = path.extname(localPath);
-        // let base = localPath.slice(0, -extension.length);
-
-        let regexp = `${options.testFileBuilder("(.+)") + extension}$`;
-        let sourceFile = path.relative(path.resolve(options.testFolder), localPath.match(new RegExp(regexp))[1]);
-        let stringToFind = path.relative(testFile, path.resolve(sourceFile));
-        stringToFind = stringToFind.replace("../", "");
-
-        let sourceCode = context.getSourceCode();
-        let comments = sourceCode["tokensAndComments"].filter((each) => (each.type === "Block" || each.type === "Line"));
-
-        if (!foundRequire(stringToFind, sourceCode, comments) && !foundRewire(stringToFind, sourceCode, comments)) {
-            context.report({
-                node: node,
-                message: LOADING_MESSAGE,
-                data: {
-                    file: sourceFile + extension
-                }
-            });
-        }
-    }
-
     function hasMatchingTestFile(node, filePath) {
         let localPath = path.relative(process.cwd(), filePath);
 
@@ -109,6 +80,39 @@ module.exports = function(context) {
                 data: {
                     file: localPath,
                     testFile: testFile
+                }
+            });
+        }
+    }
+
+    function hasPathFromTestToSource(node, testFile) {
+        let localPath = path.relative(process.cwd(), testFile);
+
+        if (!minimatch(localPath, `${options.testFolder}/**/*.*`)) {
+            return;
+        }
+
+        let extension = path.extname(localPath);
+        // let base = localPath.slice(0, -extension.length);
+
+        let regexp = `${options.testFileBuilder("(.+)") + extension}$`;
+        if (!localPath.match(new RegExp(regexp))) {
+            return;
+        }
+
+        let sourceFile = path.relative(path.resolve(options.testFolder), localPath.match(new RegExp(regexp))[1]);
+        let stringToFind = path.relative(testFile, path.resolve(sourceFile));
+        stringToFind = stringToFind.replace("../", "");
+
+        let sourceCode = context.getSourceCode();
+        let comments = sourceCode["tokensAndComments"].filter((each) => (each.type === "Block" || each.type === "Line"));
+
+        if (!foundRequire(stringToFind, sourceCode, comments) && !foundRewire(stringToFind, sourceCode, comments)) {
+            context.report({
+                node: node,
+                message: LOADING_MESSAGE,
+                data: {
+                    file: sourceFile + extension
                 }
             });
         }

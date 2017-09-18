@@ -680,8 +680,7 @@ describe("formatting", () => {
             expect(formatNumber).toHaveBeenCalledWith({
                 instance: jasmine.anything(),
                 providedFormat,
-                state,
-                defaults: state.currentOrdinalDefaults()
+                state
             });
         });
 
@@ -805,8 +804,7 @@ describe("formatting", () => {
             expect(formatNumber).toHaveBeenCalledWith({
                 instance: jasmine.anything(),
                 providedFormat,
-                state,
-                defaults: state.currentPercentageDefaults()
+                state
             });
         });
 
@@ -899,8 +897,7 @@ describe("formatting", () => {
                 instance: jasmine.anything(),
                 providedFormat,
                 state,
-                decimalSeparator: "foo",
-                defaults: state.currentCurrencyDefaults()
+                decimalSeparator: "foo"
             });
         });
 
@@ -920,8 +917,7 @@ describe("formatting", () => {
                 instance: jasmine.anything(),
                 providedFormat,
                 state,
-                decimalSeparator: " foo ",
-                defaults: state.currentCurrencyDefaults()
+                decimalSeparator: " foo "
             });
         });
 
@@ -2464,7 +2460,7 @@ describe("formatting", () => {
         });
     });
 
-    describe("regression tests", () => {
+    describe("[formatting] regression tests", () => {
         describe("compatible with version 1", () => {
             it("uses defaults", () => {
                 globalState.setDefaults({thousandSeparated: true});
@@ -2611,6 +2607,8 @@ describe("formatting", () => {
                     [-1e-23, "0.0000000000000000000000", "0.0000000000000000000000"],
                     [-1e-23, "0.00000000000000000000000", "-0.00000000000000000000001"],
                     [-1.1e-23, "0.000000000000000000000000", "-0.000000000000000000000011"],
+
+                    [-1, "$0", "-$1"],
 
                     // Non-finite numbers
                     [Infinity, "0.0", "Infinity"],

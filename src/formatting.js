@@ -283,6 +283,7 @@ function formatCurrency(instance, providedFormat, state) {
     let options = Object.assign({}, defaultOptions, providedFormat);
     let decimalSeparator = undefined;
     let space = "";
+    let average = !!options.totalLength || !!options.forceAverage || options.average;
 
     if (options.spaceSeparated) {
         space = " ";
@@ -307,7 +308,8 @@ function formatCurrency(instance, providedFormat, state) {
         }
     }
 
-    if (currentCurrency.position === "postfix") {
+    if (!currentCurrency.position || currentCurrency.position === "postfix") {
+        space = average ? "" : space;
         output = output + space + currentCurrency.symbol;
     }
 

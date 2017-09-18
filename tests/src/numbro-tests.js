@@ -134,6 +134,7 @@ describe("numbro", () => {
         let getBinaryByteUnit = undefined;
         let getDecimalByteUnit = undefined;
         let getByteUnit = undefined;
+        let formatOrDefault = undefined;
         let difference = undefined;
         let add = undefined;
         let subtract = undefined;
@@ -147,6 +148,7 @@ describe("numbro", () => {
             getBinaryByteUnit = jasmine.createSpy("getBinaryByteUnit");
             getDecimalByteUnit = jasmine.createSpy("getDecimalByteUnit");
             getByteUnit = jasmine.createSpy("getByteUnit");
+            formatOrDefault = jasmine.createSpy("formatOrDefault");
             difference = jasmine.createSpy("difference");
             add = jasmine.createSpy("add");
             subtract = jasmine.createSpy("subtract");
@@ -155,6 +157,7 @@ describe("numbro", () => {
 
             revert = numbro.__set__({
                 formatter: {
+                    formatOrDefault,
                     format: formatterFormat,
                     getByteUnit,
                     getBinaryByteUnit,
@@ -188,10 +191,18 @@ describe("numbro", () => {
 
         it("formatCurrency", () => {
             let format = jasmine.createSpy("format");
+            formatOrDefault.and.returnValue(format);
             instance.formatCurrency(format);
 
             expect(format.output).toBe("currency");
             expect(formatterFormat).toHaveBeenCalledWith(instance, format);
+        });
+
+        it("formatCurrency keeps the output", () => {
+            formatOrDefault.and.returnValue({});
+            let result = instance.formatCurrency("HH:MM:SS");
+
+            expect(result).toBeUndefined();
         });
 
         it("formatTime", () => {

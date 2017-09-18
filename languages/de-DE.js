@@ -8,8 +8,7 @@
  */
 
 module.exports = {
-    langLocaleCode: "de-DE",
-    cultureCode: "de-DE",
+    languageTag: "de-DE",
     delimiters: {
         thousands: ".",
         decimal: ","
@@ -23,19 +22,37 @@ module.exports = {
     ordinal: function() {
         return ".";
     },
+    spaceSeparated: true,
     currency: {
         symbol: "€",
         position: "postfix",
-        spaceSeparated: true,
         code: "EUR"
     },
-    defaults: {
-        currencyFormat: ",4"
+    currencyFormat: {
+        totalLength: 4,
+        thousandSeparated: true
     },
     formats: {
-        fourDigits: "4 a",
-        fullWithTwoDecimals: ",0.00 $",
-        fullWithTwoDecimalsNoCurrency: ",0.00",
-        fullWithNoDecimals: ",0 $"
+        fourDigits: {
+            totalLength: 4,
+            spaceSeparated: true,
+            average: true
+        },
+        fullWithTwoDecimals: {
+            output: "currency",
+            mantissa: 2,
+            spaceSeparated: true,
+            thousandSeparated: true
+        },
+        fullWithTwoDecimalsNoCurrency: {
+            mantissa: 2,
+            thousandSeparated: true
+        },
+        fullWithNoDecimals: {
+            output: "currency",
+            spaceSeparated: true,
+            thousandSeparated: true,
+            mantissa: 0
+        }
     }
 };

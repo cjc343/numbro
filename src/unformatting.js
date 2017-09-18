@@ -51,6 +51,133 @@ function escapeRegExp(s) {
 }
 
 /**
+ * Recursively compute the unformatted value.
+ *
+ * @param {string} inputString - string to unformat
+ * @param {*} delimiters - Delimiters used to generate the inputString
+ * @param {string} [currencySymbol] - symbol used for currency while generating the inputString
+ * @param {function} ordinal - function used to generate an ordinal out of a number
+ * @param {string} zeroFormat - string representing zero
+ * @param {*} abbreviations - abbreviations used while generating the inputString
+ * @param {NumbroFormat} format - format used while generating the inputString
+ * @return {number|undefined}
+ */
+function computeUnformattedValue(inputString, delimiters, currencySymbol = "", ordinal, zeroFormat, abbreviations, format) {
+    if (!isNaN(+inputString)) {
+        return +inputString;
+    }
+
+    let stripped = "";
+    // Negative
+
+    let newInput = inputString.replace(/(^[^(]*)\((.*)\)([^)]*$)/, "$1$2$3");
+
+    if (newInput !== inputString) {
+        return -1 * computeUnformattedValue(newInput, delimiters, currencySymbol, ordinal, zeroFormat, abbreviations, format);
+    }
+
+    // Byte
+
+    for (let i = 0; i < allSuffixes.length; i++) {
+        let suffix = allSuffixes[i];
+        stripped = inputString.replace(suffix.key, "");
+
+        if (stripped !== inputString) {
+            return computeUnformattedValue(stripped, delimiters, currencySymbol, ordinal, zeroFormat, abbreviations, format) * suffix.factor;
+        }
+    }
+
+    // Percent
+
+    stripped = inputString.replace("%", "");
+
+    if (stripped !== inputString) {
+        return computeUnformattedValue(stripped, delimiters, currencySymbol, ordinal, zeroFormat, abbreviations, format) / 100;
+    }
+
+    // Ordinal part1
+
+    let possibleOrdinalValue = parseFloat(inputString, 10);
+
+    if (isNaN(possibleOrdinalValue)) {
+        return undefined;
+    }
+
+    let ordinalString = ordinal(possibleOrdinalValue);
+    if (ordinalString !== ".") {
+        stripped = inputString.replace(new RegExp(`${escapeRegExp(ordinalString)}$`), "");
+
+        if (stripped !== inputString) {
+            return computeUnformattedValue(stripped, delimiters, currencySymbol, ordinal, zeroFormat, abbreviations, format);
+        }
+    }
+
+    // Average
+    let abbreviationKeys = Object.keys(abbreviations);
+    let numberOfAbbreviations = abbreviationKeys.length;
+
+    for (let i = 0; i < numberOfAbbreviations; i++) {
+        let key = abbreviationKeys[i];
+
+        stripped = inputString.replace(abbreviations[key], "");
+        if (stripped !== inputString) {
+            let factor = undefined;
+            switch (key) { // eslint-disable-line default-case
+                case "thousand":
+                    factor = Math.pow(10, 3);
+                    break;
+                case "million":
+                    factor = Math.pow(10, 6);
+                    break;
+                case "billion":
+                    factor = Math.pow(10, 9);
+                    break;
+                case "trillion":
+                    factor = Math.pow(10, 12);
+                    break;
+            }
+            return computeUnformattedValue(stripped, delimiters, currencySymbol, ordinal, zeroFormat, abbreviations, format) * factor;
+        }
+    }
+
+    // Ordinal part2
+
+    if (ordinalString === ".") {
+        stripped = inputString.replace(new RegExp(`${escapeRegExp(ordinalString)}$`), "");
+
+        if (stripped !== inputString) {
+            return computeUnformattedValue(stripped, delimiters, currencySymbol, ordinal, zeroFormat, abbreviations, format);
+        }
+    }
+
+    return undefined;
+}
+
+/**
+ * Removes in one pass all formatting symbols.
+ *
+ * @param {string} inputString - string to unformat
+ * @param {*} delimiters - Delimiters used to generate the inputString
+ * @param {string} [currencySymbol] - symbol used for currency while generating the inputString
+ * @return {string}
+ */
+function removeFormattingSymbols(inputString, delimiters, currencySymbol = "") {
+    // Currency
+
+    let stripped = inputString.replace(currencySymbol, "");
+
+    // Thousand separators
+
+    stripped = stripped.replace(new RegExp(escapeRegExp(delimiters.thousands), "g"), "");
+
+    // Decimal
+
+    stripped = stripped.replace(delimiters.decimal, ".");
+
+    return stripped;
+}
+
+/**
  * Unformat a numbro-generated string to retrieve the original value.
  *
  * @param {string} inputString - string to unformat
@@ -60,7 +187,7 @@ function escapeRegExp(s) {
  * @param {string} zeroFormat - string representing zero
  * @param {*} abbreviations - abbreviations used while generating the inputString
  * @param {NumbroFormat} format - format used while generating the inputString
- * @return {*}
+ * @return {number|undefined}
  */
 function unformatValue(inputString, delimiters, currencySymbol = "", ordinal, zeroFormat, abbreviations, format) {
     if (inputString === "") {
@@ -77,102 +204,8 @@ function unformatValue(inputString, delimiters, currencySymbol = "", ordinal, ze
         return 0;
     }
 
-    // Negative
-
-    let match = inputString.match(/\(([^)]*)\)/);
-
-    if (match) {
-        return -1 * unformatValue(match[1], delimiters, currencySymbol, ordinal, zeroFormat, abbreviations, format);
-    }
-
-    // Currency
-
-    let stripped = inputString.replace(currencySymbol, "");
-
-    if (stripped !== inputString) {
-        return unformatValue(stripped, delimiters, currencySymbol, ordinal, zeroFormat, abbreviations, format);
-    }
-
-    // Thousand separators
-
-    stripped = inputString.replace(new RegExp(escapeRegExp(delimiters.thousands), "g"), "");
-
-    if (stripped !== inputString) {
-        return unformatValue(stripped, delimiters, currencySymbol, ordinal, zeroFormat, abbreviations, format);
-    }
-
-    // Decimal
-
-    stripped = inputString.replace(delimiters.decimal, ".");
-
-    if (stripped !== inputString) {
-        return unformatValue(stripped, delimiters, currencySymbol, ordinal, zeroFormat, abbreviations, format);
-    }
-
-    // Byte
-
-    for (let i = 0; i < allSuffixes.length; i++) {
-        let suffix = allSuffixes[i];
-        stripped = inputString.replace(suffix.key, "");
-
-        if (stripped !== inputString) {
-            return unformatValue(stripped, delimiters, currencySymbol, ordinal, zeroFormat, abbreviations, format) * suffix.factor;
-        }
-    }
-
-    // Percent
-
-    stripped = inputString.replace("%", "");
-
-    if (stripped !== inputString) {
-        return unformatValue(stripped, delimiters, currencySymbol, ordinal, zeroFormat, abbreviations, format) / 100;
-    }
-
-    // Ordinal
-
-    let possibleOrdinalValue = parseInt(inputString, 10);
-
-    if (isNaN(possibleOrdinalValue)) {
-        return undefined;
-    }
-
-    let ordinalString = ordinal(possibleOrdinalValue);
-    stripped = inputString.replace(ordinalString, "");
-
-    if (stripped !== inputString) {
-        return unformatValue(stripped, delimiters, currencySymbol, format);
-    }
-
-    // Average
-    let abbreviationKeys = Object.keys(abbreviations);
-    let numberOfAbbreviations = abbreviationKeys.length;
-
-    for (let i = 0; i < numberOfAbbreviations; i++) {
-        let key = abbreviationKeys[i];
-
-        stripped = inputString.replace(abbreviations[key], "");
-
-        if (stripped !== inputString) {
-            let factor = undefined;
-            switch (key) { // eslint-disable-line default-case
-                case "thousand":
-                    factor = Math.pow(1000, 1);
-                    break;
-                case "million":
-                    factor = Math.pow(1000, 2);
-                    break;
-                case "billion":
-                    factor = Math.pow(1000, 3);
-                    break;
-                case "trillion":
-                    factor = Math.pow(1000, 4);
-                    break;
-            }
-            return unformatValue(stripped, delimiters, currencySymbol, ordinal, zeroFormat, abbreviations, format) * factor;
-        }
-    }
-
-    return undefined;
+    let value = removeFormattingSymbols(inputString, delimiters, currencySymbol);
+    return computeUnformattedValue(value, delimiters, currencySymbol, ordinal, zeroFormat, abbreviations, format);
 }
 
 /**

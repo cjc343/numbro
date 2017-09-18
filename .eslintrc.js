@@ -45,7 +45,7 @@ module.exports = {
     "rules": {
         "ensure-test-file": [
             error, {
-                "source": "src/**/*.js",
+                "source": "+(src|languages)/**/*.js",
                 "testFolder": "tests",
                 "testFileBuilder": (name) => `${name}-tests`
             }

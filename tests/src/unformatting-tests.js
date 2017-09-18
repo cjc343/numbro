@@ -332,7 +332,7 @@ describe("unformatting", () => {
     });
 });
 
-describe("regression tests", () => {
+describe("[unformatting] regression tests", () => {
     describe("compatible with version 1", () => {
 
         let previousFormat = undefined;

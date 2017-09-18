@@ -6,8 +6,7 @@
  */
 
 module.exports = {
-    langLocaleCode: "es-CL",
-    cultureCode: "es-CL",
+    languageTag: "es-CL",
     delimiters: {
         thousands: ".",
         decimal: ","
@@ -27,13 +26,31 @@ module.exports = {
         position: "prefix",
         code: "CLP"
     },
-    defaults: {
-        currencyFormat: "$0,0"
+    currencyFormat: {
+        output: "currency",
+        thousandSeparated: true
     },
     formats: {
-        fourDigits: "4 a",
-        fullWithTwoDecimals: ",0.00 $",
-        fullWithTwoDecimalsNoCurrency: ",0.00",
-        fullWithNoDecimals: ",0 $"
+        fourDigits: {
+            totalLength: 4,
+            spaceSeparated: true,
+            average: true
+        },
+        fullWithTwoDecimals: {
+            output: "currency",
+            mantissa: 2,
+            spaceSeparated: true,
+            thousandSeparated: true
+        },
+        fullWithTwoDecimalsNoCurrency: {
+            mantissa: 2,
+            thousandSeparated: true
+        },
+        fullWithNoDecimals: {
+            output: "currency",
+            spaceSeparated: true,
+            thousandSeparated: true,
+            mantissa: 0
+        }
     }
 };

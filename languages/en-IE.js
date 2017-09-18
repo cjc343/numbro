@@ -6,8 +6,7 @@
  */
 
 module.exports = {
-    langLocaleCode: "en-IE",
-    cultureCode: "en-IE",
+    languageTag: "en-IE",
     delimiters: {
         thousands: ",",
         decimal: "."

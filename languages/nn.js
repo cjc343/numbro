@@ -5,8 +5,7 @@
  */
 
 module.exports = {
-    langLocaleCode: "nn",
-    cultureCode: "nn",
+    languageTag: "nn",
     delimiters: {
         thousands: " ",
         decimal: ","

@@ -6,8 +6,7 @@
  */
 
 module.exports = {
-    langLocaleCode: "en-ZA",
-    cultureCode: "en-ZA",
+    languageTag: "en-ZA",
     delimiters: {
         thousands: " ",
         decimal: ","
@@ -27,13 +26,30 @@ module.exports = {
         position: "prefix",
         code: "ZAR"
     },
-    defaults: {
-        currencyFormat: ",4 a"
+    currencyFormat: {
+        thousandSeparated: true,
+        totalLength: 4,
+        spaceSeparated: true,
+        average: true
     },
     formats: {
-        fourDigits: "4 a",
-        fullWithTwoDecimals: "$ ,0.00",
-        fullWithTwoDecimalsNoCurrency: ",0.00",
-        fullWithNoDecimals: "$ ,0"
+        fourDigits: {
+            totalLength: 4,
+            spaceSeparated: true,
+            average: true
+        },
+        fullWithTwoDecimals: {
+            thousandSeparated: true,
+            mantissa: 2
+        },
+        fullWithTwoDecimalsNoCurrency: {
+            mantissa: 2,
+            thousandSeparated: true
+        },
+        fullWithNoDecimals: {
+            output: "currency",
+            thousandSeparated: true,
+            mantissa: 0
+        }
     }
 };
