@@ -143,6 +143,13 @@ describe("validatingSpec", () => {
                         exponential: true
                     },
                     "[Validate format] totalLength invalid value: `totalLength` is incompatible with `exponential`"
+                ],
+                [
+                    {
+                        prefixSymbol: true,
+                        output: "currency"
+                    },
+                    "[Validate format] prefixSymbol invalid value: `prefixSymbol` can be provided only when the output is `percent`"
                 ]
             ];
 

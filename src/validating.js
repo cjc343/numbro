@@ -112,6 +112,11 @@ const validFormat = {
     forceSign: "boolean",
     exponential: {
         type: "boolean"
+    },
+    prefixSymbol: {
+        type: "boolean",
+        restriction: (number, format) => format.output === "percent",
+        message: "`prefixSymbol` can be provided only when the output is `percent`"
     }
 };
 

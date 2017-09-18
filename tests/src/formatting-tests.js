@@ -820,6 +820,11 @@ describe("formatting", () => {
             let result = formatPercentage(instance, providedFormat, state, numbroStub);
 
             expect(result).toMatch(/ /);
+
+            providedFormat.prefixSymbol = true;
+            result = formatPercentage(instance, providedFormat, state, numbroStub);
+
+            expect(result).toMatch(/ /);
         });
 
         it("does not separate the percent sign with a space when `spaced` flag is false", () => {
@@ -832,9 +837,14 @@ describe("formatting", () => {
             let result = formatPercentage(instance, providedFormat, state, numbroStub);
 
             expect(result).not.toMatch(/ /);
+
+            providedFormat.prefixSymbol = true;
+            result = formatPercentage(instance, providedFormat, state, numbroStub);
+
+            expect(result).not.toMatch(/ /);
         });
 
-        it("appends the percent sign at the end", () => {
+        it("appends the percent sign at the end, when prefixSymbol is falsy", () => {
             let value = jasmine.createSpy("value");
             let providedFormat = jasmine.createSpy("providedFormat");
             let instance = numbroStub(value);
@@ -844,6 +854,19 @@ describe("formatting", () => {
             let result = formatPercentage(instance, providedFormat, state, numbroStub);
 
             expect(result).toMatch(/%$/);
+        });
+
+        it("appends the percent sign at the beginning, when prefixSymbol is truthy", () => {
+            let value = jasmine.createSpy("value");
+            let providedFormat = jasmine.createSpy("providedFormat");
+            let instance = numbroStub(value);
+            let state = jasmine.createSpyObj("state", ["currentAbbreviations", "currentPercentageDefaults"]);
+            state.currentAbbreviations.and.returnValue({});
+            providedFormat.prefixSymbol = true;
+
+            let result = formatPercentage(instance, providedFormat, state, numbroStub);
+
+            expect(result).toMatch(/^%/);
         });
     });
 

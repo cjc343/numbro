@@ -247,6 +247,8 @@ function formatTime(instance) {
  * @return {string}
  */
 function formatPercentage(instance, providedFormat, state, numbro) {
+    let prefixSymbol = providedFormat.prefixSymbol;
+
     let output = formatNumber({
         instance: numbro(instance._value * 100),
         providedFormat,
@@ -254,6 +256,11 @@ function formatPercentage(instance, providedFormat, state, numbro) {
         defaults: state.currentPercentageDefaults()
     });
     let options = Object.assign({}, defaultOptions, state.currentPercentageDefaults(), providedFormat);
+
+    if (prefixSymbol) {
+        return `%${options.spaceSeparated ? " " : ""}${output}`;
+    }
+
     return `${output}${options.spaceSeparated ? " " : ""}%`;
 }
 
