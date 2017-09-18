@@ -22,12 +22,53 @@
 
 const VERSION = "2.0.0";
 
-//
-// Constructor
-//
+const globalState = require("./globalState");
+const validator = require("./validating");
+const loader = require("./loading")(numbro);
+const unformatter = require("./unformatting");
+let formatter = require("./formatting")(numbro);
+let manipulate = require("./manipulating")(numbro);
 
-function Numbro(number) {
-    this._value = number;
+class Numbro {
+    constructor(number) {
+        this._value = number;
+    }
+
+    clone() { return numbro(this._value); }
+
+    format(format = {}) { return formatter.format(this, format); }
+
+    formatCurrency(format = {}) {
+        format.output = "currency";
+        return formatter.format(this, format);
+    }
+
+    formatTime(format = {}) {
+        format.output = "time";
+        return formatter.format(this, format);
+    }
+
+    binaryByteUnits() { return formatter.getBinaryByteUnit(this);}
+
+    decimalByteUnits() { return formatter.getDecimalByteUnit(this);}
+
+    byteUnits() { return formatter.getByteUnit(this);}
+
+    difference(other) { return manipulate.difference(this, other); }
+
+    add(other) { return manipulate.add(this, other); }
+
+    subtract(other) { return manipulate.subtract(this, other); }
+
+    multiply(other) { return manipulate.multiply(this, other); }
+
+    divide(other) { return manipulate.divide(this, other); }
+
+    set(input) { return manipulate.set(this, normalizeInput(input)); }
+
+    value() { return this._value; }
+
+    valueOf() { return this._value; }
 }
 
 function normalizeInput(input) {
@@ -51,37 +92,6 @@ numbro.version = VERSION;
 
 numbro.isNumbro = function(object) {
     return object instanceof Numbro;
-};
-
-const globalState = require("./globalState");
-const validator = require("./validating");
-const loader = require("./loading")(numbro);
-const unformatter = require("./unformatting");
-let formatter = require("./formatting")(numbro);
-let manipulate = require("./manipulating")(numbro);
-
-Numbro.prototype = {
-    clone: function() { return numbro(this._value); },
-    format: function(format = {}) { return formatter.format(this, format); },
-    formatCurrency: function(format = {}) {
-        format.output = "currency";
-        return formatter.format(this, format);
-    },
-    formatTime: function(format = {}) {
-        format.output = "time";
-        return formatter.format(this, format);
-    },
-    binaryByteUnits: function() { return formatter.getBinaryByteUnit(this);},
-    decimalByteUnits: function() { return formatter.getDecimalByteUnit(this);},
-    byteUnits: function() { return formatter.getByteUnit(this);},
-    difference: function(other) { return manipulate.difference(this, other); },
-    add: function(other) { return manipulate.add(this, other); },
-    subtract: function(other) { return manipulate.subtract(this, other); },
-    multiply: function(other) { return manipulate.multiply(this, other); },
-    divide: function(other) { return manipulate.divide(this, other); },
-    set: function(input) { return manipulate.set(this, normalizeInput(input)); },
-    value: function() { return this._value; },
-    valueOf: function() { return this._value; }
 };
 
 //
