@@ -296,7 +296,11 @@ function formatCurrency(instance, providedFormat, state) {
     });
 
     if (currentCurrency.position === "prefix") {
-        output = currentCurrency.symbol + space + output;
+        if (instance._value < 0 && options.negative === "sign") {
+            output = `-${space}${currentCurrency.symbol}${output.slice(1)}`;
+        } else {
+            output = currentCurrency.symbol + space + output;
+        }
     }
 
     if (currentCurrency.position === "postfix") {
