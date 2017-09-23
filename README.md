@@ -21,34 +21,27 @@ Please submit all pull requests to the `develop` branch.
 
 1. Fork the library
 
-2. [Install grunt](http://gruntjs.com/getting-started#installing-the-cli)
+1. Run `npm install` to install dependencies
 
-3. Run `npm install` to install dependencies
+1. Add your tests to the files in `/tests`
 
-4. Add your tests to the files in `/tests`
+1. To test your tests, run `npm test`
 
-5. To test your tests, run `grunt test`
-
-6. When all your tests are passing, submit a pull request to the `develop` branch.
+1. When all your tests are passing, submit a pull request to the `develop` branch.
 
 
 ### Languages
 
-Languages names follows the Microsoft culture name convention as found
-[here](https://msdn.microsoft.com/en-us/library/ee825488.aspx). If Microsoft does not have a code
-for the country/locale combination, use the format `lang-locale` where the language code is a 2
-letter abbreviation from the list of [ISO 639-1 language
-codes](http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) and the `localecode` is from the list
-of [ISO 3166-1 country codes](http://en.wikipedia.org/wiki/ISO_3166-1)
+Language tags follow the [BCP 47](https://tools.ieft.org/html/bcp47) specification.
 
 ### Language translations will not be merged without unit tests.
 
-See [the english unit tests](https://github.com/foretagsplatsen/numbro/blob/master/tests/languages/en-GB.js) for an example.
+See [the english unit tests](https://github.com/BenjaminVanRyseghem/numbro/blob/master/tests/languages/en-GB.js) for an example.
 
 
 # Changelog
 
-See [CHANGELOG.md](CHANGELOG.md).
+See [CHANGELOG.md](CHANGELOG.md). For the original project (Numeral.js) changelog, see [CHANGELOG-Numeraljs.md](CHANGELOG-Numeraljs.md).
 
 
 # Acknowledgements
