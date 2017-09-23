@@ -42,7 +42,7 @@ module.exports = {
         position: "prefix",
         code: "USD"
     },
-    currencyDefaults: {
+    currencyFormat: {
         thousandSeparated: true,
         totalLength: 4,
         spaceSeparated: true

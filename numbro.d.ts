@@ -101,13 +101,13 @@ declare namespace numbro {
 
         defaults: Format;
 
-        ordinalDefaults?: Format;
+        ordinalFormat?: Format;
 
-        byteDefaults: Format;
+        byteFormat: Format;
 
-        percentageDefaults: Format;
+        percentageFormat: Format;
 
-        currencyDefaults: Format;
+        currencyFormat: Format;
 
         formats: {
             fourDigits: Format;

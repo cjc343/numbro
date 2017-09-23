@@ -359,7 +359,7 @@ describe("formatting", () => {
                 let format = {base: "general"};
                 let value = jasmine.createSpy("value");
                 let n = numbroStub(value);
-                let state = jasmine.createSpyObj("state", ["currentByteDefaults", "currentAbbreviations"]);
+                let state = jasmine.createSpyObj("state", ["currentByteDefaultFormat", "currentAbbreviations"]);
                 state.currentAbbreviations.and.returnValue({});
                 getFormatByteUnits.and.returnValue({});
 
@@ -369,7 +369,7 @@ describe("formatting", () => {
                     instance: jasmine.anything(),
                     providedFormat: format,
                     state,
-                    defaults: state.currentByteDefaults()
+                    defaults: state.currentByteDefaultFormat()
                 });
             });
 
@@ -377,7 +377,7 @@ describe("formatting", () => {
                 let format = {base: "general"};
                 let value = jasmine.createSpy("value");
                 let instance = numbroStub(value);
-                let state = jasmine.createSpyObj("state", ["currentByteDefaults", "currentAbbreviations"]);
+                let state = jasmine.createSpyObj("state", ["currentByteDefaultFormat", "currentAbbreviations"]);
                 state.currentAbbreviations.and.returnValue({});
                 getFormatByteUnits.and.returnValue({});
 
@@ -390,7 +390,7 @@ describe("formatting", () => {
                 let format = {base: "binary"};
                 let value = jasmine.createSpy("value");
                 let n = numbroStub(value);
-                let state = jasmine.createSpyObj("state", ["currentByteDefaults", "currentAbbreviations"]);
+                let state = jasmine.createSpyObj("state", ["currentByteDefaultFormat", "currentAbbreviations"]);
                 state.currentAbbreviations.and.returnValue({});
                 getFormatByteUnits.and.returnValue({});
 
@@ -403,7 +403,7 @@ describe("formatting", () => {
                 let format = {base: "decimal"};
                 let value = jasmine.createSpy("value");
                 let n = numbroStub(value);
-                let state = jasmine.createSpyObj("state", ["currentByteDefaults", "currentAbbreviations"]);
+                let state = jasmine.createSpyObj("state", ["currentByteDefaultFormat", "currentAbbreviations"]);
                 state.currentAbbreviations.and.returnValue({});
                 getFormatByteUnits.and.returnValue({});
 
@@ -416,7 +416,7 @@ describe("formatting", () => {
                 let format = {base: undefined};
                 let value = jasmine.createSpy("value");
                 let n = numbroStub(value);
-                let state = jasmine.createSpyObj("state", ["currentByteDefaults", "currentAbbreviations"]);
+                let state = jasmine.createSpyObj("state", ["currentByteDefaultFormat", "currentAbbreviations"]);
                 state.currentAbbreviations.and.returnValue({});
                 getFormatByteUnits.and.returnValue({});
 
@@ -427,7 +427,7 @@ describe("formatting", () => {
 
             it("separates the suffix with a space when `spaced` flag is true", () => {
                 let instance = jasmine.createSpy("instance");
-                let state = jasmine.createSpyObj("state", ["currentByteDefaults", "currentAbbreviations"]);
+                let state = jasmine.createSpyObj("state", ["currentByteDefaultFormat", "currentAbbreviations"]);
                 state.currentAbbreviations.and.returnValue({spaced: true});
                 getFormatByteUnits.and.returnValue({suffix: "B"});
                 formatNumber.and.returnValue("2");
@@ -438,7 +438,7 @@ describe("formatting", () => {
 
             it("does not separate the suffix with a space when `spaced` flag is false", () => {
                 let instance = jasmine.createSpy("instance");
-                let state = jasmine.createSpyObj("state", ["currentByteDefaults", "currentAbbreviations"]);
+                let state = jasmine.createSpyObj("state", ["currentByteDefaultFormat", "currentAbbreviations"]);
                 state.currentAbbreviations.and.returnValue({spaced: false});
                 getFormatByteUnits.and.returnValue({suffix: "B"});
                 formatNumber.and.returnValue("2");
@@ -449,7 +449,7 @@ describe("formatting", () => {
 
             it("appends the suffix at the end", () => {
                 let instance = jasmine.createSpy("instance");
-                let state = jasmine.createSpyObj("state", ["currentByteDefaults", "currentAbbreviations"]);
+                let state = jasmine.createSpyObj("state", ["currentByteDefaultFormat", "currentAbbreviations"]);
                 state.currentAbbreviations.and.returnValue({});
                 getFormatByteUnits.and.returnValue({suffix: "B"});
                 formatNumber.and.returnValue("2");

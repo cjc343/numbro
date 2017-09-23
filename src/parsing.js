@@ -258,7 +258,6 @@ function parseNegative(string, result) {
  *
  * @param {string} string - format
  * @param {NumbroFormat} result - Result accumulator
- * @return {string} - format
  */
 function parseForceSign(string, result) {
     if (string.match(/^\+/)) {
@@ -271,7 +270,7 @@ function parseForceSign(string, result) {
  *
  * @param {string} string - format
  * @param {NumbroFormat} result - Result accumulator
- * @return {string} - format
+ * @return {NumbroFormat} - format
  */
 function parseFormat(string, result = {}) {
     if (typeof string !== "string") {

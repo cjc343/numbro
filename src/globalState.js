@@ -89,43 +89,51 @@ state.currentOrdinal = () => currentLanguageData().ordinal;
 
 /**
  * Return the current formatting defaults.
- * Use first uses the current language default, then fallbacks to the globally defined defaults.
+ * Use first uses the current language default, then fallback to the globally defined defaults.
  *
  * @return {{}}
  */
 state.currentDefaults = () => Object.assign({}, currentLanguageData().defaults, globalDefaults);
 
 /**
- * Return the current ordinal specific formatting defaults.
- * Use first uses the current language ordinal default, then fallbacks to the regular defaults.
+ * Return the ordinal default-format.
+ * Use first uses the current language ordinal default, then fallback to the regular defaults.
  *
  * @return {{}}
  */
-state.currentOrdinalDefaults = () => Object.assign({}, state.currentDefaults(), currentLanguageData().ordinalDefaults);
+state.currentOrdinalDefaultFormat = () => Object.assign({}, state.currentDefaults(), currentLanguageData().ordinalFormat);
 
 /**
- * Return the current byte specific formatting defaults.
- * Use first uses the current language byte default, then fallbacks to the regular defaults.
+ * Return the byte default-format.
+ * Use first uses the current language byte default, then fallback to the regular defaults.
  *
  * @return {{}}
  */
-state.currentByteDefaults = () => Object.assign({}, state.currentDefaults(), currentLanguageData().byteDefaults);
+state.currentByteDefaultFormat = () => Object.assign({}, state.currentDefaults(), currentLanguageData().byteFormat);
 
 /**
- * Return the current percentage specific formatting defaults.
- * Use first uses the current language percentage default, then fallbacks to the regular defaults.
+ * Return the percentage default-format.
+ * Use first uses the current language percentage default, then fallback to the regular defaults.
  *
  * @return {{}}
  */
-state.currentPercentageDefaults = () => Object.assign({}, state.currentDefaults(), currentLanguageData().percentageDefaults);
+state.currentPercentageDefaultFormat = () => Object.assign({}, state.currentDefaults(), currentLanguageData().percentageFormat);
 
 /**
- * Return the current currency specific formatting defaults.
- * Use first uses the current language currency default, then fallbacks to the regular defaults.
+ * Return the currency default-format.
+ * Use first uses the current language currency default, then fallback to the regular defaults.
  *
  * @return {{}}
  */
-state.currentCurrencyDefaults = () => Object.assign({}, state.currentDefaults(), currentLanguageData().currencyDefaults);
+state.currentCurrencyDefaultFormat = () => Object.assign({}, state.currentDefaults(), currentLanguageData().currencyFormat);
+
+/**
+ * Return the time default-format.
+ * Use first uses the current language currency default, then fallback to the regular defaults.
+ *
+ * @return {{}}
+ */
+state.currentTimeDefaultFormat = () => Object.assign({}, state.currentDefaults(), currentLanguageData().timeFormat);
 
 /**
  * Set the global formatting defaults.

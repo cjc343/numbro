@@ -38,7 +38,8 @@ class Numbro {
 
     format(format = {}) { return formatter.format(this, format); }
 
-    formatCurrency(format = {}) {
+    formatCurrency(format) {
+        format = formatter.formatOrDefault(format, globalState.currentCurrencyDefaultFormat());
         format.output = "currency";
         return formatter.format(this, format);
     }
@@ -112,7 +113,7 @@ numbro.languageData = globalState.languageData;
 numbro.zeroFormat = globalState.setZeroFormat;
 numbro.defaultFormat = globalState.currentDefaults;
 numbro.setDefaults = globalState.setDefaults;
-numbro.defaultCurrencyFormat = globalState.currentCurrencyDefaults;
+numbro.defaultCurrencyFormat = globalState.currentCurrencyDefaultFormat;
 numbro.validate = validator.validate;
 numbro.loadLanguagesInNode = loader.loadLanguagesInNode;
 numbro.unformat = unformatter.unformat;

@@ -50,7 +50,7 @@ const defaultOptions = {
  * This method ensure the prefix and postfix are added as the last step.
  *
  * @param {Numbro} instance - numbro instance to format
- * @param {{}} [providedFormat] - specification for formatting
+ * @param {NumbroFormat|string} [providedFormat] - specification for formatting
  * @param numbro - the numbro singleton
  * @return {string}
  */
@@ -84,15 +84,22 @@ function format(instance, providedFormat = {}, numbro) {
  */
 function formatNumbro(instance, providedFormat, numbro) {
     switch (providedFormat.output) {
-        case "currency":
+        case "currency": {
+            providedFormat = formatOrDefault(providedFormat, globalState.currentCurrencyDefaultFormat());
             return formatCurrency(instance, providedFormat, globalState, numbro);
-        case "percent":
+        }
+        case "percent": {
+            providedFormat = formatOrDefault(providedFormat, globalState.currentPercentageDefaultFormat());
             return formatPercentage(instance, providedFormat, globalState, numbro);
+        }
         case "byte":
+            providedFormat = formatOrDefault(providedFormat, globalState.currentByteDefaultFormat());
             return formatByte(instance, providedFormat, globalState, numbro);
         case "time":
+            providedFormat = formatOrDefault(providedFormat, globalState.currentTimeDefaultFormat());
             return formatTime(instance, providedFormat, globalState, numbro);
         case "ordinal":
+            providedFormat = formatOrDefault(providedFormat, globalState.currentOrdinalDefaultFormat());
             return formatOrdinal(instance, providedFormat, globalState, numbro);
         case "number":
         default:
@@ -193,7 +200,7 @@ function formatByte(instance, providedFormat, state, numbro) {
         instance: numbro(value),
         providedFormat,
         state,
-        defaults: state.currentByteDefaults()
+        defaults: state.currentByteDefaultFormat()
     });
     let abbreviations = state.currentAbbreviations();
     return `${output}${abbreviations.spaced ? " " : ""}${suffix}`;
@@ -210,13 +217,12 @@ function formatByte(instance, providedFormat, state, numbro) {
  */
 function formatOrdinal(instance, providedFormat, state) {
     let ordinalFn = state.currentOrdinal();
-    let options = Object.assign({}, defaultOptions, state.currentOrdinalDefaults(), providedFormat);
+    let options = Object.assign({}, defaultOptions, providedFormat);
 
     let output = formatNumber({
         instance,
         providedFormat,
-        state,
-        defaults: state.currentOrdinalDefaults()
+        state
     });
     let ordinal = ordinalFn(instance._value);
 
@@ -252,10 +258,9 @@ function formatPercentage(instance, providedFormat, state, numbro) {
     let output = formatNumber({
         instance: numbro(instance._value * 100),
         providedFormat,
-        state,
-        defaults: state.currentPercentageDefaults()
+        state
     });
-    let options = Object.assign({}, defaultOptions, state.currentPercentageDefaults(), providedFormat);
+    let options = Object.assign({}, defaultOptions, providedFormat);
 
     if (prefixSymbol) {
         return `%${options.spaceSeparated ? " " : ""}${output}`;
@@ -275,7 +280,7 @@ function formatPercentage(instance, providedFormat, state, numbro) {
  */
 function formatCurrency(instance, providedFormat, state) {
     const currentCurrency = state.currentCurrency();
-    let options = Object.assign({}, defaultOptions, state.currentCurrencyDefaults(), providedFormat);
+    let options = Object.assign({}, defaultOptions, providedFormat);
     let decimalSeparator = undefined;
     let space = "";
 
@@ -291,8 +296,7 @@ function formatCurrency(instance, providedFormat, state) {
         instance,
         providedFormat,
         state,
-        decimalSeparator,
-        defaults: state.currentCurrencyDefaults()
+        decimalSeparator
     });
 
     if (currentCurrency.position === "prefix") {
@@ -730,9 +734,30 @@ function formatNumber({instance, providedFormat, state = globalState, decimalSep
     return output;
 }
 
+/**
+ * If FORMAT is non-null and not just an output, return FORMAT.
+ * Return DEFAULTFORMAT otherwise.
+ *
+ * @param providedFormat
+ * @param defaultFormat
+ */
+function formatOrDefault(providedFormat, defaultFormat) {
+    if (!providedFormat) {
+        return defaultFormat;
+    }
+
+    let keys = Object.keys(providedFormat);
+    if (keys.length === 1 && keys[0] === "output") {
+        return defaultFormat;
+    }
+
+    return providedFormat;
+}
+
 module.exports = (numbro) => ({
     format: (...args) => format(...args, numbro),
     getByteUnit: (...args) => getByteUnit(...args, numbro),
     getBinaryByteUnit: (...args) => getBinaryByteUnit(...args, numbro),
-    getDecimalByteUnit: (...args) => getDecimalByteUnit(...args, numbro)
+    getDecimalByteUnit: (...args) => getDecimalByteUnit(...args, numbro),
+    formatOrDefault
 });

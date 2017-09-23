@@ -173,10 +173,11 @@ const validLanguage = {
         mandatory: true
     },
     defaults: "format",
-    ordinalDefaults: "format",
-    byteDefaults: "format",
-    percentageDefaults: "format",
-    currencyDefaults: "format",
+    ordinalFormat: "format",
+    byteFormat: "format",
+    percentageFormat: "format",
+    currencyFormat: "format",
+    timeDefaults: "format",
     formats: {
         type: "object",
         children: {

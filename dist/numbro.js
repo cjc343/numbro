@@ -278,7 +278,7 @@ function formatByte(instance, providedFormat, state, numbro) {
         instance: numbro(value),
         providedFormat: providedFormat,
         state: state,
-        defaults: state.currentByteDefaults()
+        defaults: state.currentByteDefaultFormat()
     });
     var abbreviations = state.currentAbbreviations();
     return "" + output + (abbreviations.spaced ? " " : "") + suffix;
@@ -295,13 +295,13 @@ function formatByte(instance, providedFormat, state, numbro) {
  */
 function formatOrdinal(instance, providedFormat, state) {
     var ordinalFn = state.currentOrdinal();
-    var options = Object.assign({}, defaultOptions, state.currentOrdinalDefaults(), providedFormat);
+    var options = Object.assign({}, defaultOptions, state.currentOrdinalDefaultFormat(), providedFormat);
 
     var output = formatNumber({
         instance: instance,
         providedFormat: providedFormat,
         state: state,
-        defaults: state.currentOrdinalDefaults()
+        defaults: state.currentOrdinalDefaultFormat()
     });
     var ordinal = ordinalFn(instance._value);
 
@@ -338,9 +338,9 @@ function formatPercentage(instance, providedFormat, state, numbro) {
         instance: numbro(instance._value * 100),
         providedFormat: providedFormat,
         state: state,
-        defaults: state.currentPercentageDefaults()
+        defaults: state.currentPercentageDefaultFormat()
     });
-    var options = Object.assign({}, defaultOptions, state.currentPercentageDefaults(), providedFormat);
+    var options = Object.assign({}, defaultOptions, state.currentPercentageDefaultFormat(), providedFormat);
 
     if (prefixSymbol) {
         return "%" + (options.spaceSeparated ? " " : "") + output;
@@ -360,7 +360,7 @@ function formatPercentage(instance, providedFormat, state, numbro) {
  */
 function formatCurrency(instance, providedFormat, state) {
     var currentCurrency = state.currentCurrency();
-    var options = Object.assign({}, defaultOptions, state.currentCurrencyDefaults(), providedFormat);
+    var options = Object.assign({}, defaultOptions, state.currentCurrencyDefaultFormat(), providedFormat);
     var decimalSeparator = undefined;
     var space = "";
 
@@ -377,7 +377,7 @@ function formatCurrency(instance, providedFormat, state) {
         providedFormat: providedFormat,
         state: state,
         decimalSeparator: decimalSeparator,
-        defaults: state.currentCurrencyDefaults()
+        defaults: state.currentCurrencyDefaultFormat()
     });
 
     if (currentCurrency.position === "prefix") {
@@ -1008,7 +1008,7 @@ state.currentDefaults = function () {
  *
  * @return {{}}
  */
-state.currentOrdinalDefaults = function () {
+state.currentOrdinalDefaultFormat = function () {
   return Object.assign({}, state.currentDefaults(), currentLanguageData().ordinalDefaults);
 };
 
@@ -1018,7 +1018,7 @@ state.currentOrdinalDefaults = function () {
  *
  * @return {{}}
  */
-state.currentByteDefaults = function () {
+state.currentByteDefaultFormat = function () {
   return Object.assign({}, state.currentDefaults(), currentLanguageData().byteDefaults);
 };
 
@@ -1028,7 +1028,7 @@ state.currentByteDefaults = function () {
  *
  * @return {{}}
  */
-state.currentPercentageDefaults = function () {
+state.currentPercentageDefaultFormat = function () {
   return Object.assign({}, state.currentDefaults(), currentLanguageData().percentageDefaults);
 };
 
@@ -1038,7 +1038,7 @@ state.currentPercentageDefaults = function () {
  *
  * @return {{}}
  */
-state.currentCurrencyDefaults = function () {
+state.currentCurrencyDefaultFormat = function () {
   return Object.assign({}, state.currentDefaults(), currentLanguageData().currencyDefaults);
 };
 
@@ -1519,7 +1519,7 @@ numbro.languageData = globalState.languageData;
 numbro.zeroFormat = globalState.setZeroFormat;
 numbro.defaultFormat = globalState.currentDefaults;
 numbro.setDefaults = globalState.setDefaults;
-numbro.defaultCurrencyFormat = globalState.currentCurrencyDefaults;
+numbro.defaultCurrencyFormat = globalState.currentCurrencyDefaultFormat;
 numbro.validate = validator.validate;
 numbro.loadLanguagesInNode = loader.loadLanguagesInNode;
 numbro.unformat = unformatter.unformat;

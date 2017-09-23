@@ -146,23 +146,23 @@ describe("globalState-tests", () => {
         });
 
         it("returns the ordinal defaults for the current language", () => {
-            let ordinalDefaults = jasmine.createSpy("ordinalDefaults");
-            languages["en-US"].ordinalDefaults = ordinalDefaults;
+            let ordinalFormat = jasmine.createSpy("ordinalFormat");
+            languages["en-US"].ordinalFormat = ordinalFormat;
 
-            let result = globalState.currentOrdinalDefaults();
-            expect(result).not.toBe(ordinalDefaults); // returns a copy
-            Object.keys(ordinalDefaults).forEach((key) => {
+            let result = globalState.currentOrdinalDefaultFormat();
+            expect(result).not.toBe(ordinalFormat); // returns a copy
+            Object.keys(ordinalFormat).forEach((key) => {
                 expect(result[key]).toBeDefined();
             });
         });
 
         it("combines ordinal defaults with defaults", () => {
             let defaults = {foo: 1, baz: 3};
-            let ordinalDefaults = {foo: 2, bar: 2};
+            let ordinalFormat = {foo: 2, bar: 2};
             languages["en-US"].defaults = defaults;
-            languages["en-US"].ordinalDefaults = ordinalDefaults;
+            languages["en-US"].ordinalFormat = ordinalFormat;
 
-            let result = globalState.currentOrdinalDefaults();
+            let result = globalState.currentOrdinalDefaultFormat();
             expect(result).toEqual({foo: 2, bar: 2, baz: 3});
         });
     });
@@ -181,23 +181,23 @@ describe("globalState-tests", () => {
         });
 
         it("returns the byte defaults for the current language", () => {
-            let byteDefaults = jasmine.createSpy("byteDefaults");
-            languages["en-US"].byteDefaults = byteDefaults;
+            let byteFormat = jasmine.createSpy("byteFormat");
+            languages["en-US"].byteFormat = byteFormat;
 
-            let result = globalState.currentByteDefaults();
-            expect(result).not.toBe(byteDefaults); // returns a copy
-            Object.keys(byteDefaults).forEach((key) => {
+            let result = globalState.currentByteDefaultFormat();
+            expect(result).not.toBe(byteFormat); // returns a copy
+            Object.keys(byteFormat).forEach((key) => {
                 expect(result[key]).toBeDefined();
             });
         });
 
         it("combines byte defaults with defaults", () => {
             let defaults = {foo: 1, baz: 3};
-            let byteDefaults = {foo: 2, bar: 2};
+            let byteFormat = {foo: 2, bar: 2};
             languages["en-US"].defaults = defaults;
-            languages["en-US"].byteDefaults = byteDefaults;
+            languages["en-US"].byteFormat = byteFormat;
 
-            let result = globalState.currentByteDefaults();
+            let result = globalState.currentByteDefaultFormat();
             expect(result).toEqual({foo: 2, bar: 2, baz: 3});
         });
     });
@@ -216,23 +216,23 @@ describe("globalState-tests", () => {
         });
 
         it("returns the percentage defaults for the current language", () => {
-            let percentageDefaults = jasmine.createSpy("percentageDefaults");
-            languages["en-US"].percentageDefaults = percentageDefaults;
+            let percentageFormat = jasmine.createSpy("percentageFormat");
+            languages["en-US"].percentageFormat = percentageFormat;
 
-            let result = globalState.currentPercentageDefaults();
-            expect(result).not.toBe(percentageDefaults); // returns a copy
-            Object.keys(percentageDefaults).forEach((key) => {
+            let result = globalState.currentPercentageDefaultFormat();
+            expect(result).not.toBe(percentageFormat); // returns a copy
+            Object.keys(percentageFormat).forEach((key) => {
                 expect(result[key]).toBeDefined();
             });
         });
 
         it("combines percentage defaults with defaults", () => {
             let defaults = {foo: 1, baz: 3};
-            let percentageDefaults = {foo: 2, bar: 2};
+            let percentageFormat = {foo: 2, bar: 2};
             languages["en-US"].defaults = defaults;
-            languages["en-US"].percentageDefaults = percentageDefaults;
+            languages["en-US"].percentageFormat = percentageFormat;
 
-            let result = globalState.currentPercentageDefaults();
+            let result = globalState.currentPercentageDefaultFormat();
             expect(result).toEqual({foo: 2, bar: 2, baz: 3});
         });
     });
@@ -251,23 +251,23 @@ describe("globalState-tests", () => {
         });
 
         it("returns the currency defaults for the current language", () => {
-            let currencyDefaults = jasmine.createSpy("currencyDefaults");
-            languages["en-US"].currencyDefaults = currencyDefaults;
+            let currencyFormat = jasmine.createSpy("currencyFormat");
+            languages["en-US"].currencyFormat = currencyFormat;
 
-            let result = globalState.currentCurrencyDefaults();
-            expect(result).not.toBe(currencyDefaults); // returns a copy
-            Object.keys(currencyDefaults).forEach((key) => {
+            let result = globalState.currentCurrencyDefaultFormat();
+            expect(result).not.toBe(currencyFormat); // returns a copy
+            Object.keys(currencyFormat).forEach((key) => {
                 expect(result[key]).toBeDefined();
             });
         });
 
         it("combines currency defaults with defaults", () => {
             let defaults = {foo: 1, baz: 3};
-            let currencyDefaults = {foo: 2, bar: 2};
+            let currencyFormat = {foo: 2, bar: 2};
             languages["en-US"].defaults = defaults;
-            languages["en-US"].currencyDefaults = currencyDefaults;
+            languages["en-US"].currencyFormat = currencyFormat;
 
-            let result = globalState.currentCurrencyDefaults();
+            let result = globalState.currentCurrencyDefaultFormat();
             expect(result).toEqual({foo: 2, bar: 2, baz: 3});
         });
     });

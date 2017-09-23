@@ -259,9 +259,9 @@ describe("validatingSpec", () => {
                         },
                         ordinal: () => "",
                         currency: {},
-                        currencyDefaults: {bar: 2}
+                        currencyFormat: {bar: 2}
                     },
-                    "[Validate currencyDefaults] Invalid key: bar"
+                    "[Validate currencyFormat] Invalid key: bar"
                 ],
                 [
                     {
