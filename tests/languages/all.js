@@ -56,6 +56,7 @@ exports.misc = {
                   [ 'ja-JP', 'JPY' ],
                   [ 'ko-KR', 'KPW' ],
                   [ 'lv-LV', 'EUR' ],
+                  [ 'ms-MY', 'MYR' ],
                   [ 'nb-NO', 'NOK' ],
                   [ 'nb', 'NOK' ],
                   [ 'nl-BE', 'EUR' ],

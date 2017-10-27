@@ -36,6 +36,7 @@ exports['it-IT'] = require('./it-IT.js');
 exports['ja-JP'] = require('./ja-JP.js');
 exports['ko-KR'] = require('./ko-KR.js');
 exports['lv-LV'] = require('./lv-LV.js');
+exports['ms-MY'] = require('./ms-MY.js');
 exports['nb-NO'] = require('./nb-NO.js');
 exports['nb'] = require('./nb.js');
 exports['nl-BE'] = require('./nl-BE.js');
